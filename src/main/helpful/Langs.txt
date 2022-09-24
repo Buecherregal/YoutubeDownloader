@@ -1,0 +1,21 @@
+possible Langs? taken from star walkin
+zj-Hant
+cs
+en
+fr
+de
+el
+hu
+it
+ja
+ko
+pl
+pt-BR
+ro
+ru
+es
+es-419
+es-MX
+th
+tr
+vi
