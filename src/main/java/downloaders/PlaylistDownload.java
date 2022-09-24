@@ -8,7 +8,8 @@ import com.github.kiulian.downloader.model.playlist.PlaylistInfo;
 import com.github.kiulian.downloader.model.playlist.PlaylistVideoDetails;
 import util.Constants;
 
-import java.io.File;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,8 +17,11 @@ public class PlaylistDownload {
 
     private final String url;
 
+    private StringBuilder failed;
+
     public PlaylistDownload(String url) {
         this.url = url;
+        failed = new StringBuilder();
     }
 
     /**
@@ -73,6 +77,9 @@ public class PlaylistDownload {
                 }).async();
         Response<PlaylistInfo> response = downloader.getPlaylistInfo(request);
 
+        if(response.data() == null) {
+            throw new RuntimeException("could not get video info for video: " + url);
+        }
         return response.data();
     }
 
@@ -87,10 +94,26 @@ public class PlaylistDownload {
 
         PlaylistInfo info = requestPlaylistInfo();
         for(PlaylistVideoDetails details: info.videos()){
-            Download download = new Download(Constants.ytPrefix + Constants.vidPrefix + details.videoId());
+            try {
+                Download download = new Download(Constants.ytPrefix + Constants.vidPrefix + details.videoId());
 
-            list.add(download.downloadAudio(path + "\\" + info.details().title()));
+                list.add(download.downloadAudio(path + "\\" + info.details().title()));
+            } catch(RuntimeException e) {
+                System.out.println("failed download for: " + Constants.ytPrefix + Constants.vidPrefix + details.videoId());
+                failed.append(Constants.ytPrefix + Constants.vidPrefix).append(details.videoId());
+            }
         }
         return list;
+    }
+
+    /**
+     * prints failed video urls to file
+     *
+     * @param path designated path, names file "failed"
+     */
+    public void printToFile(String path) throws IOException {
+        FileOutputStream out = new FileOutputStream(path + "failed.txt");
+        out.write(failed.append("\n").toString().getBytes(StandardCharsets.UTF_8));
+        out.close();
     }
 }

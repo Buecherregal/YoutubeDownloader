@@ -1,13 +1,12 @@
-import org.jaudiotagger.audio.exceptions.CannotReadException;
-import org.jaudiotagger.audio.exceptions.CannotWriteException;
-import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
-import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
-import org.jaudiotagger.tag.TagException;
+import downloaders.PlaylistDownload;
 
 import java.io.IOException;
 
 public class Application {
 
-    public static void main(String[] args) throws TagException, CannotReadException, InvalidAudioFrameException, ReadOnlyFileException, IOException, CannotWriteException {
+    public static void main(String[] args) throws IOException {
+      PlaylistDownload d = new PlaylistDownload("https://www.youtube.com/playlist?list=PLBwefvAJjA3772l82M4wRvXXKxP9YiKr_");
+       d.downloadPlaylistAudio("");
+       d.printToFile("");
     }
 }

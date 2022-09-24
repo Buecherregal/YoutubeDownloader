@@ -27,7 +27,6 @@ import org.jaudiotagger.tag.mp4.Mp4FieldKey;
 import org.jaudiotagger.tag.mp4.Mp4Tag;
 import util.Constants;
 
-import javax.sound.sampled.spi.AudioFileWriter;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -95,10 +94,11 @@ public class Download {
                         System.out.println(throwable.getMessage());
                     }
                 })
+                .maxRetries(5)
                 .async();
         Response<VideoInfo> response = downloader.getVideoInfo(request);
         if(response.data() == null) {
-            throw new RuntimeException("could not get video info");
+            throw new RuntimeException("could not get video info for video: " + url);
         }
         return response.data();
     }
