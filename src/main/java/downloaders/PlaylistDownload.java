@@ -15,7 +15,7 @@ import java.util.List;
 
 public class PlaylistDownload {
 
-    private final String url;
+    private String url;
 
     private StringBuilder failed;
 
@@ -129,12 +129,12 @@ public class PlaylistDownload {
         return url;
     }
 
-    public StringBuilder getFailed() {
-        return failed;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
-    public void setFailed(StringBuilder failed) {
-        this.failed = failed;
+    public StringBuilder getFailed() {
+        return failed;
     }
 
     public PlaylistInfo getInfo() {
