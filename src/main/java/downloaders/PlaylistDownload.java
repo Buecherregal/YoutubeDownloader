@@ -19,6 +19,8 @@ public class PlaylistDownload {
 
     private StringBuilder failed;
 
+    private PlaylistInfo info;
+
     public PlaylistDownload(String url) {
         this.url = url;
         failed = new StringBuilder();
@@ -92,7 +94,7 @@ public class PlaylistDownload {
     public List<File> downloadPlaylistAudio(String path) {
         List<File> list = new ArrayList<>();
 
-        PlaylistInfo info = requestPlaylistInfo();
+        info = requestPlaylistInfo();
         for(PlaylistVideoDetails details: info.videos()){
             try {
                 Download download = new Download(Constants.ytPrefix + Constants.vidPrefix + details.videoId());
@@ -112,8 +114,34 @@ public class PlaylistDownload {
      * @param path designated path, names file "failed"
      */
     public void printToFile(String path) throws IOException {
-        FileOutputStream out = new FileOutputStream(path + "failed.txt");
-        out.write(failed.append("\n").toString().getBytes(StandardCharsets.UTF_8));
+        String newPath = path + "\\";
+        if(info != null) {
+            newPath += info.details().title() + "\\";
+        }
+        newPath += "failed.txt";
+        failed.append("\n");
+        FileOutputStream out = new FileOutputStream(newPath);
+        out.write(failed.toString().getBytes(StandardCharsets.UTF_8));
         out.close();
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public StringBuilder getFailed() {
+        return failed;
+    }
+
+    public void setFailed(StringBuilder failed) {
+        this.failed = failed;
+    }
+
+    public PlaylistInfo getInfo() {
+        return info;
+    }
+
+    public void setInfo(PlaylistInfo info) {
+        this.info = info;
     }
 }

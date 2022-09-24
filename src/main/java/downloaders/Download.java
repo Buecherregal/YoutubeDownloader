@@ -281,4 +281,16 @@ public class Download {
         }
         return formatted.toString();
     }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public VideoInfo getInfo() {
+        return info;
+    }
+
+    public void setInfo(VideoInfo info) {
+        this.info = info;
+    }
 }
